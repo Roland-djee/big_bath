@@ -1,0 +1,126 @@
+big_bath
+========
+
+This code is intended to generate the interations between
+spin systems embedded in a bath of spin impurities.
+
+***Last modified version 09/03/2015***
+
+Big Bath - Fortran library for spin interaction generation
+==========================================================
+
+Generates all interactions (hyperfine, dipolar) between spins
+in a bath. 
+
+*To be implemented soon*
+- Includes the generation of a crystal structure.
+
+
+Installation
+============
+
+Requirements:
+
+- Intel or GNU fortran compiler
+- Git
+- Make/Cmake
+
+The following instructions are for a Unix-like environment
+without root privileges.
+
+In a terminal,
+
+```sh
+mkdir big_bath
+cd big_bath
+git clone https://github.com/UCLGuichard/big_bath
+```
+
+This gets the code. Now let's build it.
+
+```sh
+mkdir ./build
+cd ./build
+cmake ..
+make
+```
+
+If all went well, you should now have created an executable big_bath.exe in 
+the ./bin directory.
+
+You may wish to modify the CMakeLists.txt to adapt to your own system.
+
+***big_bath has been tested on Scientific Linux***
+
+Usage
+-----
+
+Run the executable big_bath.exe in the ./bin directory.
+It takes the arguments defined in the input files 
+
+System.inp      ! Sets the properties of the system.
+
+in the ./input folder. Modify them for your own purposes.
+
+Testing
+-------
+
+*To be implemented soon.*
+
+Example
+-------
+
+Getting help
+------------
+
+Documentation
+=============
+
+Requirements:
+
+- Dot (contained in Graphviz package)
+- LaTeX compiler (pdflatex)
+
+You can generate a full documentation of big_bath by using doxygen with the
+Doxyfile:
+
+doxygen Doxyfile
+
+This will produce both an html call tree and a LaTeX documentation in the
+doc directory.
+
+License
+=======
+
+See LICENSE file for more details.
+
+Citation
+========
+
+See CITATION file for more details.
+
+Version
+=======
+
+1.0 (in progress)
+
+History
+=======
+
+big_bath is originally written by R. Guichard starting in 2015. Checking has
+been performed with Setrak Balian's C++ spindec code:
+
+http://www.bitbucket.org/sbalian/spindec
+
+Acknowledgements
+================
+
+- Prof. Tania Monteiro
+- Setrak Balian
+
+Contact
+=======
+
+[Roland Guichard] - <r.guichard@ucl.ac.uk>
+
+
