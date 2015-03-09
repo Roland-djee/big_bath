@@ -1,0 +1,23 @@
+# List of files to be ignored
+*.inp
+*.inp~
+*.txt
+*.txt~
+*.dat
+*.dat~
+*.exe
+*.out
+*.o
+*.mod
+*.dyn
+Doxyfile
+Doxyfile~
+CITATION~
+LICENSE~
+README~
+
+# List of directories to be ignored
+./bin
+./build
+./doc
+./input
