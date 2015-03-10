@@ -5,7 +5,7 @@ module read
 
 contains
 
-subroutine read_inputs_generate
+subroutine read_input
   implicit none
   ! local variables
   integer(kind=8) :: i, System=10
@@ -41,9 +41,9 @@ subroutine read_inputs_generate
   read(System, fmt2) power
   close(System)
 
-  phi   = phi * convert
+  phi   = phi   * convert
   theta = theta * convert
 
-end subroutine read_inputs_generate
+end subroutine read_input
 
 end module read

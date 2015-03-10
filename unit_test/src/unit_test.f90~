@@ -23,38 +23,7 @@ program big_bath
   use generate
   use write
   use interactions
+
   implicit none
 
-!> Read the system basis from input
-
-  call read_input
-
-!> Generate the crystal
-
-  call generate_crystal
-
-!> Output the crystal coordinates
-  
-  call crystal_outputs
-
-!> Evaluate impurities
-
-  call generate_impurities
-
-!> Output the impurities coordinates
-
-  call impurities_outputs
-
-!> Evaluate couplings
-
-  call couplings
-
-!> Output the coupling values
-  
-  call couplings_outputs
-
-!> Select pairs for nuclear problem
-
-  call select_nuc
- 
 end program big_bath
