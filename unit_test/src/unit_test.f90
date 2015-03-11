@@ -18,8 +18,13 @@
 
 program unit_test
   use test_read
+  use test_generate
   implicit none
 
   call unit_test_read
+
+  call unit_test_generate_crystal
+
+  call unit_test_generate_impurities
 
 end program unit_test
