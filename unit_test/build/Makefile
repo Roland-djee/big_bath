@@ -167,6 +167,14 @@ src/unit_test.f90.o:
 	$(MAKE) -f CMakeFiles/unit_test.exe.dir/build.make CMakeFiles/unit_test.exe.dir/src/unit_test.f90.o
 .PHONY : src/unit_test.f90.o
 
+test/test_generate.o: test/test_generate.f90.o
+.PHONY : test/test_generate.o
+
+# target to build an object file
+test/test_generate.f90.o:
+	$(MAKE) -f CMakeFiles/unit_test.exe.dir/build.make CMakeFiles/unit_test.exe.dir/test/test_generate.f90.o
+.PHONY : test/test_generate.f90.o
+
 test/test_read.o: test/test_read.f90.o
 .PHONY : test/test_read.o
 
@@ -191,6 +199,7 @@ help:
 	@echo "... home/rguichard/Desktop/cluster/library/generate.o"
 	@echo "... home/rguichard/Desktop/cluster/library/interactions.o"
 	@echo "... src/unit_test.o"
+	@echo "... test/test_generate.o"
 	@echo "... test/test_read.o"
 .PHONY : help
 

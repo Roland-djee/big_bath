@@ -1,9 +1,0 @@
-# The fortran modules provided by this target.
-provides
- constants
- generate
- interactions
- read
- test_read
- types
- write
