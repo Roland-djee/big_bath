@@ -73,6 +73,8 @@ contains
     read(System, fmt3) Tmax
     read(System, fmt2) nb_pts_t
     read(System, fmt2) power
+    read(System, fmt5) threshold
+    read(System, fmt3) threshold_val
     close(System)
     
     !> convert angles to radians
