@@ -8,7 +8,7 @@
 !> Dr. Roland Guichard University College London
 !
 ! DESCRIPTION: 
-!> This module contains the subroutines needed to geenrate the crystal sites
+!> This module contains the subroutines needed to generate the crystal sites
 !> and the impurities sites.
 !
 ! REVISION HISTORY:
