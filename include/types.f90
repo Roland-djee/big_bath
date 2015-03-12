@@ -14,12 +14,14 @@ module types
   double precision :: polar_up, polar_down
   double precision :: Jnuc
   double precision :: R0, R1, theta, phi 
+  double precision :: threshold_val
 
   logical :: crys_sites
   logical :: crys_imp
   logical :: coup_val
   logical :: deco_val
   logical :: sphere
+  logical :: threshold
 
   ! Arrays
   integer(kind=8), allocatable :: imp(:), Sites_x(:), Sites_y(:), Sites_z(:)
