@@ -1,3 +1,20 @@
+!------------------------------------------------------------------------------
+! interactions module
+!------------------------------------------------------------------------------
+!
+! MODULE: interactions
+!
+!> @author
+!> Dr. Roland Guichard University College London
+!
+! DESCRIPTION: 
+!> This module contains the subroutines needed to compute the interactions 
+!> (hyperfine, dipolar) between the spin systems considered.
+!
+! REVISION HISTORY:
+! 11-03-2015 - Initial Version
+!------------------------------------------------------------------------------
+
 module interactions
   use types 
   use constants
@@ -5,6 +22,24 @@ module interactions
   implicit none
 
 contains
+
+  !---------------------------------------------------------------------------  
+  !> @author 
+  !> Dr. Roland Guichard University College London
+  !
+  ! DESCRIPTION: 
+  !> Selects the pairs for nuclear decoherence.
+  !> @brief
+  !> Selects among the total number of pairs the flip-flopping ones 
+  !> likely to interact with the nucleus.
+  !
+  ! REVISION HISTORY:
+  ! TODO_11_03_2015 - Break the subroutine into smaller ones - TODO_select_nuc
+  !
+  !> @param[in]  C12, HYPER
+  !> @param[out] --      
+  !> @return     C12, DC, DJ
+  !--------------------------------------------------------------------------- 
 
   subroutine select_nuc
     implicit none
@@ -23,13 +58,14 @@ contains
     allocate(DC_n(Np))
     
     ! locate the nearest impurity to the input J value
-    !loc  = minloc(abs(HYPER - Jnuc), 1)
-    !Jnuc = HYPER(loc)
+    ! loc  = minloc(abs(HYPER - Jnuc), 1)
+    ! Jnuc = HYPER(loc)
+    !> locate the nucleus 
     loc = 1
     Jnuc = HYPER(loc)
     
-    ! select corresponding C12 values between qubit A and
-    ! all other impurities for DFF
+    !> select corresponding C12 values between the nucleus and
+    !> all other impurities
     m = 0
     n = 0
     do k=1,nb_imp - 1
@@ -47,8 +83,8 @@ contains
        end do
     end do
   
-    ! creating a temporary array of C12 differences between qubit A and
-    ! all impurity pair
+    !> creating a temporary array of C12 differences between the nucleus and
+    !> all impurity pairs
     m = 0
     do k=1,nb_imp - 2
        do l=k + 1,nb_imp - 1
@@ -57,7 +93,7 @@ contains
        end do
     end do
 
-    ! creating an array of J differences between the impurity pairs
+    !> creating an array of J differences for the impurity pairs
     m = 0
     do k=2,nb_imp - 1
        do l=k + 1,nb_imp
@@ -67,64 +103,87 @@ contains
        end do
     end do
 
-    ! creating a temporary C12 array excluding previous CA1 values
+    !> creating a temporary C12 array excluding previous CA1 values
     C12_tmp = pack (C12, C12 .ne. 0.d0)
     
     deallocate (C12)
     allocate (C12(Np), DJ(Np), DC(Np))
     allocate (mask(Np))
     
-    ! reset C12, J arrays and nb_pairs for IFF
+    !> reset C12, J arrays and nb_pairs for IFF
     C12      = C12_tmp
     DJ       = DJ_tmp
     DC       = DC_tmp
     nb_pairs = Np 
 
-    print*,'nb pairs nuclear',nb_pairs
+    write(*,10),'Number of nuclear pairs :',nb_pairs
+10  format( (a, i) )
 
-    !if(1==2)then
-    mask = .false.
-    where (abs(C12) .gt. 1.d-2*2.d0*pi) mask = .true.  
+    !> selecting the pairs above a defined C12 threshold if so
+    if (threshold) then
+       mask = .false.
+       where (abs(C12) .gt. threshold_val * 2.d0 * pi) mask = .true.  
+       
+       nb_pairs = count(mask)
 
-    nb_pairs = count(mask)
+       write(*,20),'Number of selected pairs:',nb_pairs
+20     format( (a, i) )
 
-    print*,'nb pairs nuclear masked',nb_pairs
+       deallocate(C12_tmp, DC_tmp, DJ_tmp)
+       allocate(C12_tmp(nb_pairs), DC_tmp(nb_pairs), DJ_tmp(nb_pairs))
+    
+       C12_tmp = pack(C12, mask)
+       DC_tmp  = pack(DC, mask)
+       DJ_tmp  = pack(DJ, mask)
 
-    deallocate(C12_tmp, DC_tmp, DJ_tmp)
-    allocate(C12_tmp(nb_pairs), DC_tmp(nb_pairs), DJ_tmp(nb_pairs))
+       deallocate(C12,DC,DJ)
+       allocate(C12(nb_pairs),DC(nb_pairs),DJ(nb_pairs))
 
-    C12_tmp = pack(C12, mask)
-    DC_tmp  = pack(DC, mask)
-    DJ_tmp  = pack(DJ, mask)
-
-    deallocate(C12,DC,DJ)
-    allocate(C12(nb_pairs),DC(nb_pairs),DJ(nb_pairs))
-
-    C12 = C12_tmp
-    DC  = DC_tmp
-    DJ  = DJ_tmp
+       C12 = C12_tmp
+       DC  = DC_tmp
+       DJ  = DJ_tmp
+    end if
 
     deallocate(C12_tmp, DJ_tmp, DC_tmp)
   
   end subroutine select_nuc
 
+  !---------------------------------------------------------------------------  
+  !> @author 
+  !> Dr. Roland Guichard University College London
+  !
+  ! DESCRIPTION: 
+  !> Ask for the computation of couplings.
+  !> @brief
+  !> Directs to the computing subroutines for each interaction type.
+  !
+  ! REVISION HISTORY:
+  ! TODO_11_03_2015 - - TODO_couplings
+  !
+  !> @param[in]  --
+  !> @param[out] --      
+  !> @return     --
+  !--------------------------------------------------------------------------- 
+
   subroutine couplings
     implicit none
     
-    ! define the number of impurity pairs
+    !> define the number of impurity pairs
     nb_pairs = nb_imp * (nb_imp - 1) / 2
-    print*,'nb pairs', nb_pairs
-    
-    ! calculate hyperfine coupling values
+
+    write(*,10),'Total number of pairs   :',nb_pairs
+10  format( (a, i) )
+   
+    !> calculate hyperfine coupling values between the electron
+    !> and each impurity
     call hyperfine
      
-    ! calculate dipolar coupling values between all impurity pairs
+    !> calculate dipolar coupling values between members of all pairs
     call dipolar
 
-    ! calculate dipolar coupling values between all impurity pairs
+    !> calculate dipolar coupling values between the nuclei
+    !> and each impurity
     call dipolar_n
-
-    !HYPER = HYPER + C12_n
       
   end subroutine couplings
 
