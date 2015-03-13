@@ -193,6 +193,24 @@ contains
        test = .false.
     end if
 
+    if (threshold == .true.) then
+       write(*,*)'threshold...ok'
+    else
+       test = .false.
+    end if
+
+    if (threshold_val == 1.d-2) then
+       write(*,*)'threshold_val...ok'
+    else
+       test = .false.
+    end if
+
+    if (e_n_coupling == .true.) then
+       write(*,*)'e_n_coupling...ok'
+    else
+       test = .false.
+    end if
+
     if (test) then
        write(*,*)'Test read_input successful'
     else
