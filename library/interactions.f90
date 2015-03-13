@@ -183,7 +183,7 @@ contains
 
     !> calculate dipolar coupling values between the nuclei
     !> and each impurity
-    call dipolar_n
+    if (e_n_coupling) call dipolar_n
       
   end subroutine couplings
 
@@ -269,6 +269,23 @@ contains
   
   end subroutine dipolar
 
+  !---------------------------------------------------------------------------  
+  !> @author 
+  !> Dr. Roland Guichard University College London
+  !
+  ! DESCRIPTION: 
+  !> Calculates the hyperfine values.
+  !> @brief
+  !> Calculate the hyperfine value between the electron and all impurities.
+  !
+  ! REVISION HISTORY:
+  ! TODO_12_03_2015 -  - TODO_F
+  !
+  !> @param[in]  Imp_x,Imp_y,Imp_z
+  !> @param[out] --      
+  !> @return     HYPER
+  !--------------------------------------------------------------------------- 
+
   subroutine hyperfine
     implicit none
     ! Local variables and arrays
@@ -277,21 +294,39 @@ contains
  
     allocate (HYPER(nb_imp))
 
-    ! scale impurities coordinates in angstroms
+    !> scale impurities coordinates in angstroms
     X_imp = scaling * Imp_x
     Y_imp = scaling * Imp_y
     Z_imp = scaling * Imp_z
    
-    ! compute the terms of the KLW expression
+    !> compute the terms of the KLW
     term1 = F(X_imp, Y_imp, Z_imp) * dcos(k0 * X_imp)
     term2 = F(Y_imp, Z_imp, X_imp) * dcos(k0 * Y_imp)
     term3 = F(Z_imp, X_imp, Y_imp) * dcos(k0 * Z_imp)
 
-    ! array of hyperfine values for each impurity
+    !> array of hyperfine values
     HYPER = term1 + term2 + term3
     HYPER = p * HYPER**2
                
   end subroutine hyperfine
+
+  !---------------------------------------------------------------------------  
+  !> @author 
+  !> Dr. Roland Guichard University College London
+  !
+  ! DESCRIPTION: 
+  !> Calculates the F part of the hyperfine Kohn-Luttinger wavefunction.
+  !> @brief
+  !> Calculate the F part of the hyperfine value between the electron and 
+  !> all impurities.
+  !
+  ! REVISION HISTORY:
+  ! TODO_12_03_2015 -  - TODO_F
+  !
+  !> @param[in]  x,y,z
+  !> @param[out] --      
+  !> @return     F
+  !--------------------------------------------------------------------------- 
  
   function F(x, y, z)
     implicit none
