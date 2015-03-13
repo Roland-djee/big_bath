@@ -1,0 +1,52 @@
+module test_interactions
+  use interactions
+  implicit none
+
+contains
+
+  subroutine unit_test_F
+    implicit none
+    integer :: i,j,k,nb_imp
+    double precision, allocatable :: x(:),y(:),z(:)
+    double precision, allocatable :: test_Func1(:)
+    double precision, allocatable :: test_Func2(:)
+    double precision :: a,b,n
+
+    logical :: test
+
+    a = 25.09d0
+    b = 14.43d0
+    n = dsqrt(0.029d0/0.044d0)
+
+    nb_imp = 100
+
+    allocate(x(nb_imp),y(nb_imp),z(nb_imp))
+    allocate(test_Func1(nb_imp),test_Func2(nb_imp))
+
+    x = (/(dble(i),i=1,nb_imp)/)
+    y = x
+    z = x
+
+    do i=1,nb_imp
+       test_Func1(i) = -dsqrt(x(i)**2/((n*b)**2)+(y(i)**2+z(i)**2)/((n*a)**2))
+       test_Func1(i) = dexp(test_Func1(i))/dsqrt(pi*(n*a)**2*(n*b))
+    end do
+
+    test = .true.
+    test_Func2 = F(x,y,z)
+    do i=1,nb_imp
+       if(abs(test_Func1(i) - test_Func2(i)) .gt. 1.d-15) test = .false.
+    end do
+
+    if (test) then
+       write(*,*)'Test F successful'
+    else
+       write(*,*)'Test F failed'
+    end if
+
+    deallocate(x,y,z)
+    deallocate(test_Func1,test_Func2)
+
+  end subroutine unit_test_F
+
+end module test_interactions

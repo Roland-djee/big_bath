@@ -15,6 +15,9 @@
 *.stamp
 *.internal
 *.spi
+*.log
+Makefile2
+Makefile
 Doxyfile
 Doxyfile~
 CITATION~
