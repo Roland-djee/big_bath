@@ -19,6 +19,8 @@
 program unit_test
   use test_read
   use test_generate
+  use test_interactions
+  
   implicit none
 
   call unit_test_read
@@ -26,5 +28,11 @@ program unit_test
   call unit_test_generate_crystal
 
   call unit_test_generate_impurities
+
+  deallocate(Imp_x,Imp_y,Imp_z)
+
+  call unit_test_F
+
+  call unit_test_hyperfine
 
 end program unit_test
