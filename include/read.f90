@@ -75,8 +75,9 @@ contains
     read(System, fmt2) power
     read(System, fmt5) threshold
     read(System, fmt3) threshold_val
+    read(System, fmt5) e_n_coupling
     close(System)
-    
+
     !> convert angles to radians
     phi   = phi   * convert
     theta = theta * convert
