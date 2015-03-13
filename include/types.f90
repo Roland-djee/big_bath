@@ -22,6 +22,7 @@ module types
   logical :: deco_val
   logical :: sphere
   logical :: threshold
+  logical :: e_n_coupling
 
   ! Arrays
   integer(kind=8), allocatable :: imp(:), Sites_x(:), Sites_y(:), Sites_z(:)
