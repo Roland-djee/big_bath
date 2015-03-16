@@ -4,6 +4,77 @@ module test_interactions
 
 contains
 
+  subroutine unit_test_dipolar
+    implicit none
+    integer :: i,j,k    
+    double precision :: Orient_norm
+    integer(kind=8), allocatable :: X_dist(:)
+    integer(kind=8), allocatable :: Y_dist(:)
+    integer(kind=8), allocatable :: Z_dist(:)
+
+    double precision, allocatable :: dist(:)
+    double precision, allocatable :: proj(:)
+    double precision, allocatable :: cos_t12(:)
+    double precision, allocatable :: C12_2(:)
+
+    logical :: test
+
+    nb_imp = 20
+    nb_pairs = nb_imp * (nb_imp - 1) / 2
+    
+    allocate(Imp_x(nb_imp),Imp_y(nb_imp),Imp_z(nb_imp))
+    allocate(X_dist(nb_pairs),Y_dist(nb_pairs),Z_dist(nb_pairs))
+    allocate(dist(nb_pairs),proj(nb_pairs),cos_t12(nb_pairs),C12_2(nb_pairs))
+
+    Imp_x = (/(i,i=1,nb_imp)/)
+    Imp_y = Imp_x
+    Imp_z = Imp_x
+
+    Orientation%x = 1
+    Orientation%x = 2
+    Orientation%x = 3
+
+    call dipolar
+
+    k = 0
+    do i=1,nb_imp - 1
+       do j=i + 1,nb_imp
+          k = k + 1
+          X_dist(k) = Imp_x(j) - Imp_x(i)
+          Y_dist(k) = Imp_y(j) - Imp_y(i)
+          Z_dist(k) = Imp_z(j) - Imp_z(i)
+       end do
+    end do
+
+    Orient_norm = dsqrt(dble(Orientation%x**2) + &
+                        dble(Orientation%y**2) + &
+                        dble(Orientation%z**2))
+
+    dist    = dsqrt(dble(X_dist**2) + dble(Y_dist**2) + dble(Z_dist**2))
+    proj    = Orientation%x*X_dist + Orientation%y*Y_dist + Orientation%z*Z_dist
+    cos_t12 = proj / (Orient_norm * dist)
+    C12_2   = pref * (1.d0 - 3.d0 * cos_t12**2) / ((scaling * dist)**3)
+
+    test = .true.
+    do i=1,nb_pairs
+       if(abs(C12(i) - C12_2(i)) .gt. 1.d-15) test = .false.
+    end do
+
+    if (test) then
+       write(*,*)'Test dipolar successful'
+    else
+       write(*,*)'Test dipolar failed'
+    end if
+
+    open(10,file='dipolar_benchmark.dat')
+    do i=1,nb_pairs
+       write(10,*)scaling * dist(i), C12(i)
+    end do
+
+    write(*,*)'Dipolar_benchmark written'
+
+  end subroutine unit_test_dipolar
+
   subroutine unit_test_hyperfine
     implicit none
     integer :: i
@@ -45,6 +116,24 @@ contains
     else
        write(*,*)'Test hyperfine failed'
     end if
+
+    deallocate (HYPER)
+    deallocate(Imp_x,Imp_y,Imp_z)
+    nb_imp = 1000  
+    allocate(Imp_x(nb_imp),Imp_y(nb_imp),Imp_z(nb_imp))
+
+    Imp_x = (/(i,i=1,nb_imp)/)
+    Imp_y = 0
+    Imp_z = 0
+
+    call hyperfine
+
+    open(10,file='hyperfine_benchmark.dat')
+    do i=1,nb_imp
+       write(10,*)scaling * Imp_x(i),HYPER(i)
+    end do
+
+    write(*,*)'Hyperfine_benchmark written'
 
     deallocate(Imp_x,Imp_y,Imp_z)
     deallocate(X_imp,Y_imp,Z_imp)
