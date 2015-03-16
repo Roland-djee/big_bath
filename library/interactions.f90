@@ -225,6 +225,24 @@ contains
   
   end subroutine dipolar_n
 
+  !---------------------------------------------------------------------------  
+  !> @author 
+  !> Dr. Roland Guichard University College London
+  !
+  ! DESCRIPTION: 
+  !> Calculates the dipolar couplings.
+  !> @brief
+  !> Calculate the dipolar value between the members of pairs formed by all 
+  !> impurities.
+  !
+  ! REVISION HISTORY:
+  ! TODO_12_03_2015 -  - TODO_F
+  !
+  !> @param[in]  Imp_x,Imp_y,Imp_z
+  !> @param[out] --      
+  !> @return     C12
+  !---------------------------------------------------------------------------
+
   subroutine dipolar
     implicit none    
     ! Local variables and arrays
@@ -237,16 +255,16 @@ contains
     double precision :: dist(nb_pairs)
     double precision :: cos_t12(nb_pairs)
 
-    ! allocations
+    !> allocation
     allocate (C12(nb_pairs))
 
-    ! Orientation norm
+    !> B field norm
     Orient_norm = dsqrt(dble(Orientation%x**2) + &
                         dble(Orientation%y**2) + &
                         dble(Orientation%z**2))
     
-    ! coordinate difference between every impurity spin pairs
-    ! avoiding double counting
+    !> coordinate difference between every impurity spin pairs
+    !> avoiding double counting
     k = 0
     do i=1,nb_imp - 1
        do j=i + 1,nb_imp
@@ -257,14 +275,14 @@ contains
        end do
     end do
   
-    ! distance between every spin partners of impurity pairs
+    !> distance between every spin partners of impurity pairs
     dist    = dsqrt(dble(X_dist**2) + dble(Y_dist**2) + dble(Z_dist**2))
-    ! Projection
+    !> Projection
     proj    = Orientation%x*X_dist + Orientation%y*Y_dist + Orientation%z*Z_dist
-    ! cos(theta_12)
+    !> cos(theta_12)
     cos_t12 = proj / (Orient_norm * dist)
     
-    ! array of C12 values for each impurity pair
+    !> array of C12 values for each impurity pair
     C12 = pref * (1.d0 - 3.d0 * cos_t12**2) / ((scaling * dist)**3)
   
   end subroutine dipolar
