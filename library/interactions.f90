@@ -63,7 +63,7 @@ contains
     !> locate the nucleus 
     loc = 1
     Jnuc = HYPER(loc)
-    
+ 
     !> select corresponding C12 values between the nucleus and
     !> all other impurities
     m = 0
@@ -82,14 +82,14 @@ contains
           end if
        end do
     end do
-  
+
     !> creating a temporary array of C12 differences between the nucleus and
     !> all impurity pairs
     m = 0
     do k=1,nb_imp - 2
        do l=k + 1,nb_imp - 1
           m = m + 1
-          DC_tmp(m) = CA1(k)   - CA1(l)
+          DC_tmp(m) = CA1(k) - CA1(l)
        end do
     end do
 
@@ -142,6 +142,7 @@ contains
        C12 = C12_tmp
        DC  = DC_tmp
        DJ  = DJ_tmp
+
     end if
 
     deallocate(C12_tmp, DJ_tmp, DC_tmp)
@@ -187,6 +188,23 @@ contains
       
   end subroutine couplings
 
+  !---------------------------------------------------------------------------  
+  !> @author 
+  !> Dr. Roland Guichard University College London
+  !
+  ! DESCRIPTION: 
+  !> Calculates the dipolar couplings between the electron and the impurities.
+  !> @brief
+  !> Calculate the dipolar value between the electron and all impurities.
+  !
+  ! REVISION HISTORY:
+  ! TODO_16_03_2015 -  - TODO_F
+  !
+  !> @param[in]  Imp_x,Imp_y,Imp_z
+  !> @param[out] --      
+  !> @return     C12_n
+  !---------------------------------------------------------------------------
+
   subroutine dipolar_n
     implicit none    
     ! Local variables and arrays
@@ -198,29 +216,29 @@ contains
     double precision :: dist(nb_imp)
     double precision :: cos_t12(nb_imp)
 
-    ! allocations
+    !> allocations
     allocate (C12_n(nb_imp))
 
-    ! Orientation norm
+    !> Orientation norm
     Orient_norm = dsqrt(dble(Orientation%x**2) + &
                         dble(Orientation%y**2) + &
                         dble(Orientation%z**2))
     
-    ! coordinate difference between every impurity spin pairs
-    ! avoiding double counting
+    !> coordinate difference between every impurity spin pairs
+    !> avoiding double counting
  
     X_dist = Imp_x
     Y_dist = Imp_y
     Z_dist = Imp_z
    
-    ! distance between every spin partners of impurity pairs
+    !> distance between every spin partners of impurity pairs
     dist    = dsqrt(dble(X_dist**2) + dble(Y_dist**2) + dble(Z_dist**2))
-    ! Projection
+    !> Projection
     proj    = Orientation%x*X_dist + Orientation%y*Y_dist + Orientation%z*Z_dist
-    ! cos(theta_12)
+    !> cos(theta_12)
     cos_t12 = proj / (Orient_norm * dist)
     
-    ! array of C12 values for each impurity pair
+    !> array of C12 values for each impurity pair
     C12_n = pref2 * (1.d0 - 3.d0 * cos_t12**2) / ((scaling * dist)**3)
   
   end subroutine dipolar_n
