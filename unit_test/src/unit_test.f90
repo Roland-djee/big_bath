@@ -35,4 +35,6 @@ program unit_test
 
   call unit_test_hyperfine
 
+  call unit_test_dipolar
+
 end program unit_test
