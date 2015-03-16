@@ -37,4 +37,12 @@ program unit_test
 
   call unit_test_dipolar
 
+  deallocate(Imp_x,Imp_y,Imp_z)
+
+  call unit_test_dipolar_n
+
+  deallocate(C12,C12_n,HYPER)
+
+  call unit_test_select_nuc
+
 end program unit_test
