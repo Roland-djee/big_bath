@@ -12,9 +12,7 @@ Big Bath - Fortran library for spin interaction generation
 Generates all interactions (hyperfine, dipolar) between spins
 in a bath. 
 
-*To be implemented soon*
 - Includes the generation of a crystal structure.
-
 
 Installation
 ============
@@ -65,7 +63,26 @@ in the ./input folder. Modify them for your own purposes.
 Testing
 -------
 
-*To be implemented soon.*
+A bundle of unit tests is implemented in the directory ./unit_test.
+To run all of them at once, follow the instructions
+
+```sh
+cd ./unit_test
+mkdir ./build
+cd ./build
+cmake ..
+make
+```
+This creates an executable in the ./bin directory. Then, run it
+
+```sh
+cd ../bin
+./unit_test.exe
+```
+
+It should display a serie of test for each subroutine with 'ok'. 
+Output files are also created which allows to compare with the benchmarks
+in the ./benchmark directory.
 
 Example
 -------
@@ -81,12 +98,12 @@ Requirements:
 - Dot (contained in Graphviz package)
 - LaTeX compiler (pdflatex)
 
-You can generate a full documentation of big_bath by using doxygen with the
-Doxyfile:
+You can generate a full documentation of big_bath by using doxygen with 
+the Doxyfile:
 
 doxygen Doxyfile
 
-This will produce both an html call tree and a LaTeX documentation in the
+This will produce both an html call tree and a pdf LaTeX documentation in the
 doc directory.
 
 License
