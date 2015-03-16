@@ -4,6 +4,138 @@ module test_interactions
 
 contains
 
+  subroutine unit_test_select_nuc
+    implicit none
+
+    integer :: i,j,k
+
+    double precision, allocatable :: C12_test(:)
+    double precision, allocatable :: C12_n_test(:)
+    double precision, allocatable :: HYPER_test(:)
+
+    logical :: test
+
+    nb_imp   = 10
+    nb_pairs = nb_imp * (nb_imp - 1) / 2
+
+    allocate(C12(nb_pairs),C12_n(nb_imp),HYPER(nb_imp))
+    allocate(C12_test(nb_pairs),C12_n_test(nb_imp),HYPER_test(nb_imp))
+
+    C12   = (/(dble(i)**2,i=1,nb_pairs)/)
+    C12_test = C12
+    C12_n = (/(dble(i)**3,i=1,nb_imp)/)
+    C12_n_test = C12_n
+    HYPER = (/(dble(i)**4,i=1,nb_imp)/)
+    HYPER_test = HYPER
+
+    call select_nuc
+   
+    test = .true.
+    do i=nb_imp,nb_pairs
+       j = i - nb_imp + 1
+       if(abs(C12_test(i) - C12(j)) .gt. 1.d-15) test = .false.
+    end do
+
+    if (test) then
+       write(*,*)'Test C12 select_nuc successful'
+    else
+       write(*,*)'Test C12 select_nuc failed'
+    end if
+
+    k = 0
+    do i=2,nb_imp - 1
+       do j=i+1,nb_imp
+          k = k + 1
+          if((HYPER(i) - HYPER(j)) - DJ(k) .gt. 1.d-15) test = .false.
+          if((C12_n(i) - C12_n(j)) - DC(k) .gt. 1.d-15) test = .false.
+       end do
+    end do
+
+    if (test) then
+       write(*,*)'Test DJ select_nuc successful'
+    else
+       write(*,*)'Test DJ select_nuc failed'
+    end if
+
+    if (test) then
+       write(*,*)'Test DC select_nuc successful'
+    else
+       write(*,*)'Test DC select_nuc failed'
+    end if
+
+  end subroutine unit_test_select_nuc
+
+  subroutine unit_test_dipolar_n
+    implicit none
+    integer :: i,j,k    
+    double precision :: Orient_norm
+    integer(kind=8), allocatable :: X_dist(:)
+    integer(kind=8), allocatable :: Y_dist(:)
+    integer(kind=8), allocatable :: Z_dist(:)
+
+    double precision, allocatable :: dist(:)
+    double precision, allocatable :: proj(:)
+    double precision, allocatable :: cos_t12(:)
+    double precision, allocatable :: C12_2(:)
+
+    logical :: test
+
+    nb_imp = 20
+   
+    allocate(Imp_x(nb_imp),Imp_y(nb_imp),Imp_z(nb_imp))
+    allocate(X_dist(nb_imp),Y_dist(nb_imp),Z_dist(nb_imp))
+    allocate(dist(nb_imp),proj(nb_imp),cos_t12(nb_imp),C12_2(nb_imp))
+
+    Imp_x = (/(i,i=1,nb_imp)/)
+    !Imp_y = Imp_x
+    !Imp_z = Imp_x
+
+    Imp_y = 0
+    Imp_z = 0
+
+    Orientation%x = 0
+    Orientation%y = 0
+    Orientation%z = 1
+
+    call dipolar_n
+    
+    X_dist = Imp_x
+    Y_dist = Imp_y
+    Z_dist = Imp_z
+  
+    Orient_norm = dsqrt(dble(Orientation%x**2) + &
+                        dble(Orientation%y**2) + &
+                        dble(Orientation%z**2))
+
+    dist    = dsqrt(dble(X_dist**2) + dble(Y_dist**2) + dble(Z_dist**2))
+    proj    = Orientation%x*X_dist + Orientation%y*Y_dist + Orientation%z*Z_dist
+    cos_t12 = proj / (Orient_norm * dist)
+    C12_2   = pref2 * (1.d0 - 3.d0 * cos_t12**2) / ((scaling * dist)**3)
+
+    test = .true.
+    do i=1,nb_imp
+       if(abs(C12_n(i) - C12_2(i)) .gt. 1.d-15) test = .false.
+    end do
+
+    if (test) then
+       write(*,*)'Test dipolar_n successful'
+    else
+       write(*,*)'Test dipolar_n failed'
+    end if
+
+    open(10,file='dipolar_n_benchmark.dat')
+    do i=1,nb_imp
+       write(10,*)scaling * dist(i), C12_n(i)
+    end do
+
+    write(*,*)'Dipolar_n_benchmark written'
+
+    deallocate(Imp_x,Imp_y,Imp_z)
+    deallocate(X_dist,Y_dist,Z_dist)
+    deallocate(dist,proj,cos_t12,C12_2)
+
+  end subroutine unit_test_dipolar_n
+
   subroutine unit_test_dipolar
     implicit none
     integer :: i,j,k    
@@ -27,12 +159,15 @@ contains
     allocate(dist(nb_pairs),proj(nb_pairs),cos_t12(nb_pairs),C12_2(nb_pairs))
 
     Imp_x = (/(i,i=1,nb_imp)/)
-    Imp_y = Imp_x
-    Imp_z = Imp_x
+    !Imp_y = Imp_x
+    !Imp_z = Imp_x
 
-    Orientation%x = 1
-    Orientation%x = 2
-    Orientation%x = 3
+    Imp_y = 0
+    Imp_z = 0
+
+    Orientation%x = 0
+    Orientation%y = 0
+    Orientation%z = 1
 
     call dipolar
 
