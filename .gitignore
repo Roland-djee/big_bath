@@ -15,9 +15,9 @@
 *.txt~
 *.dat
 *.dat~
-!./unit_test/benchmark/C12.dat
-!./unit_test/benchmark/C12_n.dat
-!./unit_test/benchmark/hyperfine.dat
+!unit_test/benchmark/C12.dat
+!unit_test/benchmark/C12_n.dat
+!unit_test/benchmark/hyperfine.dat
 *.out
 *.o
 *.mod
