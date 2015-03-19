@@ -70,6 +70,7 @@ To run all of them at once, follow the instructions
 
 ```sh
 cd ./unit_test
+mkdir ./bin
 mkdir ./build
 cd ./build
 cmake ..
