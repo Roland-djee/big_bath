@@ -1,16 +1,18 @@
 # List of directories to be ignored
-./bin
-./build
-./build/CMakeFiles
-./doc
-./unit_test/build
-./unit_test/build/CMakeFiles
-./unit_test/bin
+bin
+build
+build/CMakeFiles
+doc
+unit_test/build
+unit_test/build/CMakeFiles
+unit_test/bin
 
 # List of files to be ignored
 !.gitignore
 *.f90~
 *.exe
+*.inp
+!input/System_example.inp
 *.inp~
 *.txt~
 *.dat
