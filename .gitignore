@@ -1,5 +1,4 @@
 # List of files to be ignored
-*.inp
 *.inp~
 *.txt~
 *.dat
@@ -23,6 +22,7 @@ LICENSE~
 README~
 
 # List of directories to be ignored
+./input/System.inp
 ./bin
 ./build
 ./build/CMakeFiles
