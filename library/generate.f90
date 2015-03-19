@@ -79,8 +79,8 @@ contains
     !> reset parameters
     nb_imp = size(imp_temp)
 
-    write(*,10),'Number of impurity sites:',nb_imp
-10  format( (a, i) )
+    write(*,10)'Number of impurity sites:',nb_imp
+10  format( (a, i30) )
 
     deallocate(imp)
     allocate(imp(nb_imp))
@@ -215,8 +215,8 @@ contains
   
     nb_sites = m 
   
-    write(*,10),'Number of crystal sites :',nb_sites
-10  format( (a, i) )
+    write(*,10)'Number of crystal sites :',nb_sites
+10  format( (a, i30) )
 
     allocate(tmp_x(m), tmp_y(m), tmp_z(m))
     
