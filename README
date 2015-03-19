@@ -37,6 +37,7 @@ git clone https://github.com/UCLGuichard/big_bath
 This gets the code. Now let's build it.
 
 ```sh
+mkdir ./bin
 mkdir ./build
 cd ./build
 cmake ..
