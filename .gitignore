@@ -1,7 +1,7 @@
 # List of files to be ignored
+*.exe
 *.inp~
 *.txt~
-*.dat
 *.dat~
 *.exe
 *.out
