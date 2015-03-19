@@ -58,7 +58,8 @@ It takes the arguments defined in the input files
 
 System.inp      ! Sets the properties of the system.
 
-in the ./input folder. Modify them for your own purposes.
+in the ./input folder. To do so, just rename System_example.inp
+to System.inp and modify it for your own purposes.
 
 Testing
 -------
