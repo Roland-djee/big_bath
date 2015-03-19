@@ -1,4 +1,5 @@
 # List of files to be ignored
+*.f90~
 *.exe
 *.inp~
 *.txt~
