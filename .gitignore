@@ -2,6 +2,7 @@
 *.exe
 *.inp~
 *.txt~
+*.dat
 *.dat~
 *.exe
 *.out
