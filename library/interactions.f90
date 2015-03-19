@@ -116,8 +116,8 @@ contains
     DC       = DC_tmp
     nb_pairs = Np 
 
-    write(*,10),'Number of nuclear pairs :',nb_pairs
-10  format( (a, i) )
+    write(*,10)'Number of nuclear pairs :',nb_pairs
+10  format( (a, i30) )
 
     !> selecting the pairs above a defined C12 threshold if so
     if (threshold) then
@@ -126,8 +126,8 @@ contains
        
        nb_pairs = count(mask)
 
-       write(*,20),'Number of selected pairs:',nb_pairs
-20     format( (a, i) )
+       write(*,20)'Number of selected pairs:',nb_pairs
+20     format( (a, i30) )
 
        deallocate(C12_tmp, DC_tmp, DJ_tmp)
        allocate(C12_tmp(nb_pairs), DC_tmp(nb_pairs), DJ_tmp(nb_pairs))
@@ -173,7 +173,7 @@ contains
     nb_pairs = nb_imp * (nb_imp - 1) / 2
 
     write(*,10),'Total number of pairs   :',nb_pairs
-10  format( (a, i) )
+10  format( (a, i30) )
    
     !> calculate hyperfine coupling values between the electron
     !> and each impurity
