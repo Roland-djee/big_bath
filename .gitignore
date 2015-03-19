@@ -1,7 +1,6 @@
 # List of files to be ignored
 *.inp
 *.inp~
-*.txt
 *.txt~
 *.dat
 *.dat~
@@ -18,7 +17,6 @@
 *.log
 Makefile2
 Makefile
-Doxyfile
 Doxyfile~
 CITATION~
 LICENSE~
@@ -29,8 +27,6 @@ README~
 ./build
 ./build/CMakeFiles
 ./doc
-./input
 ./unit_test/build
 ./unit_test/build/CMakeFiles
 ./unit_test/bin
-./unit_test/input
